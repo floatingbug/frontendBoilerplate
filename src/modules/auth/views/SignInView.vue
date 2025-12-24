@@ -1,16 +1,23 @@
 <script setup>
-import { ref } from "vue";
-import {useRouter} from "vue-router";
+import { ref, onMounted } from "vue";
+import {useRouter, useRoute} from "vue-router";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { signin } from "../api/auth.api.js";
 import AuthFormCard from "../components/organisms/AuthFormCard.vue";
 
 const router = useRouter();
+const route = useRoute();
 const nameOrEmail = ref("");
 const password = ref("");
 const authStore = useAuthStore();
 const isLoading = ref(false);
 const errorMessage = ref("");
+
+onMounted(() => {
+  if (route.query.msg) {
+    errorMessage.value = route.query.msg;
+  }
+});
 
 async function onSubmit() {
   const credentials = {
@@ -23,7 +30,7 @@ async function onSubmit() {
   try {
     const response = await signin({credentials});
     authStore.setUser(response.data.user);
-    authStore.setToken(response.data.token);
+    authStore.setToken(response.data.accessToken);
 
     router.push("/");
   }

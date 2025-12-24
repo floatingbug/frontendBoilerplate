@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import http from "@/services/http.service.js";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -18,6 +19,16 @@ export const useAuthStore = defineStore("auth", {
       this.user = null;
       this.token = null;
       this.isAuthenticated = false;
+    },
+    async refreshToken() {
+      try {
+        const res = await http.get("/auth/refresh");
+        this.setToken(res.data.accessToken);
+        return res.data.accessToken;
+      } catch (err) {
+        this.clear();
+        throw err;
+      }
     },
   },
 });
