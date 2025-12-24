@@ -1,11 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import {authRoutes} from "@/modules/auth";
+import authRoutes from "@/modules/auth/router";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 
 const routes = [
   ...authRoutes,
-  { path: '/', redirect: '/login' },
-  { path: '/:pathMatch(.*)*', redirect: '/login' }, // NotFound
 ];
 
 const router = createRouter({

@@ -1,29 +1,62 @@
 <script setup>
 import { ref } from "vue";
+import {useRouter} from "vue-router";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { signin } from "../api/auth.api.js";
+import AuthFormCard from "../components/organisms/AuthFormCard.vue";
 
-const email = ref("");
+const router = useRouter();
+const nameOrEmail = ref("");
 const password = ref("");
 const authStore = useAuthStore();
+const isLoading = ref(false);
+const errorMessage = ref("");
 
-async function submit() {
+async function onSubmit() {
+  const credentials = {
+    nameOrEmail: nameOrEmail.value,
+    password: password.value
+  };
+
+  isLoading.value = true;
+
   try {
-    const response = await login({ email: email.value, password: password.value });
+    const response = await signin({credentials});
     authStore.setUser(response.data.user);
     authStore.setToken(response.data.token);
-  } catch (err) {
-    console.error("Login failed", err);
-    // Optional: Toast or Error-State
+
+    router.push("/");
+  }
+  catch (err) {
+    errorMessage.value =
+      err?.data?.message || "Login failed. Please try again.";
+  }
+  finally{
+    isLoading.value = false;
   }
 }
 </script>
 
 <template>
-  <div class="login">
-    <input v-model="email" placeholder="Email" />
-    <input type="password" v-model="password" placeholder="Password" />
-    <button @click="submit">Login</button>
-  </div>
+  <AuthFormCard
+    :errorMessage="errorMessage"
+    @submit="onSubmit"
+    @formInput="errorMessage = null;"
+  >
+    <template #header>
+      <h1>Sign in</h1>
+    </template>
+
+    <InputText v-model="nameOrEmail" placeholder="Name or E-Mail" />
+    <Password v-model="password" placeholder="Password" toggleMask :feedback="false" />
+
+    <Button type="submit" label="Sign in" :loading="isLoading" />
+
+    <template #footer>
+      <RouterLink to="/auth/signup">
+        Don't have an account?
+      </RouterLink>
+    </template>
+  </AuthFormCard>
 </template>
 
