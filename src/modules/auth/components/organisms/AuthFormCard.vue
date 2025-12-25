@@ -35,11 +35,13 @@ defineEmits(["submit", "formInput"]);
 <style scoped>
 .auth-form-card {
   width: 100%;
-  max-width: 420px;
+  height: 100%;
+
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
 }
+
 
 .auth-form-body {
   display: flex;

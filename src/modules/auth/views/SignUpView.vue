@@ -61,4 +61,7 @@ async function onSubmit() {
 </template>
 
 <style scoped>
+:deep(.p-password-input) {
+  min-width: 0;
+}
 </style>
