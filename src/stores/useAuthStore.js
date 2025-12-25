@@ -7,29 +7,27 @@ export const useAuthStore = defineStore("auth", {
     token: null,
     isAuthenticated: false,
   }),
+
   actions: {
     setUser(user) {
       this.user = user;
       this.isAuthenticated = !!user;
     },
+
     setToken(token) {
       this.token = token;
     },
+
     clear() {
       this.user = null;
       this.token = null;
       this.isAuthenticated = false;
     },
+
     async refreshToken() {
-      try {
-        const res = await http.get("/auth/refresh");
-        this.setToken(res.data.accessToken);
-        return res.data.accessToken;
-      } catch (err) {
-        this.clear();
-        throw err;
-      }
+      const res = await http.get("/auth/refresh");
+      this.setToken(res.data.accessToken);
+      return res.data.accessToken;
     },
   },
 });
-

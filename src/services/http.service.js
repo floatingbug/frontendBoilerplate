@@ -8,23 +8,79 @@ const http = axios.create({
   withCredentials: true,
 });
 
-// Request interceptor: attach access token
+/**
+ * Attach access token to every request
+ */
 http.interceptors.request.use((config) => {
   const authStore = useAuthStore();
+
   if (authStore.token) {
     config.headers.Authorization = `Bearer ${authStore.token}`;
   }
+
   return config;
 });
 
-// Response interceptor: global error handling
+/**
+ * Refresh token handling
+ */
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+function subscribeTokenRefresh(cb) {
+  refreshSubscribers.push(cb);
+}
+
+function onRefreshed(token) {
+  refreshSubscribers.forEach((cb) => cb(token));
+  refreshSubscribers = [];
+}
+
 http.interceptors.response.use(
-  (res) => res,
-  (error) => {
-    if (error.response?.status === 401) {
-      const authStore = useAuthStore();
-      authStore.clear(); // Auto logout on 401
+  (response) => response,
+  async (error) => {
+    const authStore = useAuthStore();
+    const originalRequest = error.config;
+
+    if (!error.response) {
+      return Promise.reject(error);
     }
+
+    if (
+      error.response.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("/auth/refresh")
+    ) {
+      originalRequest._retry = true;
+
+      if (isRefreshing) {
+        // Wait for refresh to finish
+        return new Promise((resolve) => {
+          subscribeTokenRefresh((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(http(originalRequest));
+          });
+        });
+      }
+
+      isRefreshing = true;
+
+      try {
+        const newToken = await authStore.refreshToken();
+        onRefreshed(newToken);
+
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return http(originalRequest);
+      }
+      catch (refreshError) {
+        authStore.clear();
+        return Promise.reject(refreshError);
+      }
+      finally {
+        isRefreshing = false;
+      }
+    }
+
     return Promise.reject(error.response || error);
   }
 );
