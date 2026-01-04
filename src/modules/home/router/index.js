@@ -1,11 +1,11 @@
 import HomeView from "../views/HomeView.vue";
-import DefaultLayout from "@/layouts/DefaultLayout.vue";
+import {PublicLayout} from "@/layouts";
 
 
 export default [
   {
     path: "/",
-    component: DefaultLayout,
+    component: PublicLayout,
     children: [
       {
         path: "",
