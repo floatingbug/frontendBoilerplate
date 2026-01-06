@@ -1,51 +1,94 @@
 <script setup>
 import { ref } from "vue";
+import {navItems} from "../navigation.config.js";
 
 const drawerVisible = ref(false);
 const toggleDrawer = () => (drawerVisible.value = !drawerVisible.value);
 </script>
 
 <template>
-  <div class="mobile-navigation">
-    <button @click="toggleDrawer" class="hamburger-btn">☰</button>
+  <Button class="burger-toggle-btn"
+    icon="pi pi-bars"
+    severity="secondary"
+    variant="text"
+    @click="toggleDrawer"
+  />
 
-    <Drawer v-model:visible="drawerVisible" position="left" :showHeader="false">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/features">Features</a></li>
-        <li><a href="/pricing">Pricing</a></li>
-        <li><a href="/login">Login</a></li>
-      </ul>
-    </Drawer>
-  </div>
+  <Drawer
+    v-model:visible="drawerVisible"
+    position="left"
+    :showHeader="false"
+    :pt="{
+      root: {
+        style: {
+          'background-color': 'var(--color-surface-mid)'
+        }
+      }
+    }"
+  >
+    <ul class="nav-link-list">
+      <li
+        v-for="item in navItems"
+        :key="item.id"
+      >
+        <RouterLink :to="item.to">
+          <div class="link-icon">
+            <i v-if="item.icon" :class="item.icon" />
+          </div>
+
+          <div class="link-label">
+            {{item.label}}
+          </div>
+        </RouterLink>
+      </li>
+    </ul>
+  </Drawer>
 </template>
 
 <style lang="scss" scoped>
 @use "@/styles/breakpoints" as bp;
 @use "@/styles/media" as media;
 
-.hamburger-btn {
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
+.burger-toggle-btn {
+  box-shadow: var(--shadow-sm);
 }
 
-.mobile-navigation {
-  display: flex;
-}
-
-.mobile-navigation ul {
+.nav-link-list {
   list-style: none;
-  padding: 1rem;
+  padding: var(--space-md);
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-md);
 }
 
-.mobile-navigation a {
+.nav-link-list li {
+  border-radius: var(--radius-md);
+}
+
+.nav-link-list a {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: var(--space-lg) 0;
   text-decoration: none;
-  color: inherit;
+  color: var(--color-text);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-surface-top);
+}
+
+.link-icon {
+  position: absolute;
+  right: 50%;
+  transform: translateX(-100%);
+  margin-right: var(--space-sm);
+}
+
+.link-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>

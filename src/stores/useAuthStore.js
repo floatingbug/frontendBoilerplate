@@ -25,9 +25,13 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async refreshToken() {
-      const res = await http.get("/auth/refresh");
-      this.setToken(res.data.accessToken);
-      return res.data.accessToken;
+      const refreshTokenResponse = await http.post("/auth/refresh");
+      this.setToken(refreshTokenResponse.data.accessToken);
+
+      const getUserResponse = await http.get("/users/me");
+      this.setUser(getUserResponse.data);
+
+      return;
     },
   },
 });

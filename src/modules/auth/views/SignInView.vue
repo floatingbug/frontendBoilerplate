@@ -32,11 +32,11 @@ async function onSubmit() {
     authStore.setUser(response.data.user);
     authStore.setToken(response.data.accessToken);
 
-    router.push("/");
+    router.push("/dashboard");
   }
   catch (err) {
     errorMessage.value =
-      err?.data?.message || "Login failed. Please try again.";
+      err?.response?.data?.message || "Login failed. Please try again.";
   }
   finally{
     isLoading.value = false;

@@ -1,12 +1,20 @@
-<script setup></script>
+<script setup>
+import {navItems} from "../navigation.config.js";
+</script>
 
 <template>
   <nav class="desktop-navigation">
     <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/features">Features</a></li>
-      <li><a href="/pricing">Pricing</a></li>
-      <li><a href="/login">Login</a></li>
+      <li
+        v-for="item in navItems"
+        :key="item.id"
+      >
+        <RouterLink
+          :to="item.to"
+        >
+          {{item.label}}
+        </RouterLink>
+      </li>
     </ul>
   </nav>
 </template>
@@ -20,6 +28,11 @@
   margin: 0;
   padding: 0;
   display: flex;
-  gap: 1.5rem;
+  gap: var(--space-lg);
+}
+
+.desktop-navigation a {
+  text-decoration: none;
+  color: var(--color-text);
 }
 </style>

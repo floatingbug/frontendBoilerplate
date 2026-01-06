@@ -10,7 +10,7 @@ onMounted(async () => {
   try {
     await authStore.refreshToken();
   } catch (err) {
-    const message = err?.data?.message || "Your session has expired. Please log in again.";
+    const message = err?.data?.message || "Your session has expired. Please sign in again.";
 
     router.push({ path: "/auth/signin", query: { msg: message } });
   }

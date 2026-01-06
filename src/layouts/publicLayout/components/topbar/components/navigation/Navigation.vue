@@ -1,12 +1,18 @@
 <script setup>
 import DesktopNavigation from "./components/DesktopNavigation.vue";
 import MobileNavigation from "./components/MobileNavigation.vue";
+
+
 </script>
 
 <template>
   <div class="navigation">
-    <MobileNavigation />
-    <DesktopNavigation />
+    <div class="mobile-nav-container">
+      <MobileNavigation />
+    </div>
+    <div class="desktop-nav-container">
+      <DesktopNavigation />
+    </div>
   </div>
 </template>
 
@@ -14,7 +20,7 @@ import MobileNavigation from "./components/MobileNavigation.vue";
 @use "@/styles/breakpoints" as bp;
 @use "@/styles/media" as media;
 
-.desktop-navigation {
+.desktop-nav-container {
   display: none;
 
   @include media.up(bp.$bp-md) {
@@ -22,7 +28,7 @@ import MobileNavigation from "./components/MobileNavigation.vue";
   }
 }
 
-.mobile-navigation {
+.mobile-nav-container {
   display: flex;
 
   @include media.up(bp.$bp-md) {

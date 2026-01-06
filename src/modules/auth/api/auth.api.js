@@ -2,15 +2,15 @@
 import http from "@/services/http.service.js";
 
 export function signin({credentials}) {
-  return http.post("/auth/login", credentials);
+  return http.post("/auth/sign-in", credentials);
 }
 
 export function signup(data) {
-  return http.post("/auth/signup", data);
+  return http.post("/auth/sign-up", data);
 }
 
 export function logout() {
-  return http.post("/auth/logout");
+  return http.post("/auth/sign-out");
 }
 
 export function getCurrentUser() {
