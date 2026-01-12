@@ -1,2 +1,1 @@
-export {default as Topbar} from "./topbar/Topbar.vue";
-export {default as Footer} from "./footer/Footer.vue";
+export {default as AuthButtons} from "./authButtons/AuthButtons.vue";

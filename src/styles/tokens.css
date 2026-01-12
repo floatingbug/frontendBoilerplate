@@ -32,6 +32,16 @@
 }
 
 /* ===========================
+   Sizing
+   =========================== */
+:root {
+  --topbar-height: 56px;
+  --footer-height: 56px;
+
+  --sidebar-desktop-width: 200px;
+}
+
+/* ===========================
    Border Radius
    =========================== */
 :root {
@@ -58,6 +68,11 @@
     inset 0 1px 2px hsla(0, 0%, 100%, 0.44),  /* surface */
     0 4px 6px hsla(0, 0%, 0%, 0.19),          /* elevation */
     0 6px 10px hsla(0, 0%, 0%, 1);            /* elevation soft / härtester Layer */
+
+  --shadow-footer:
+    inset 0 1px 2px hsla(0, 0%, 100%, 0.15),
+    0 -3px 6px hsla(0, 0%, 0%, 0.08),
+    0 -6px 12px hsla(0, 0%, 0%, 0.05);
 }
 
 /* ===========================
@@ -86,6 +101,8 @@
   /* Hover / Active states */
   --color-hover-light: rgba(0,0,0,0.04);
   --color-active-light: rgba(0,0,0,0.06);
+
+  --color-topbar: var(--p-primary-100);
 }
 
 /* ===========================
@@ -122,6 +139,11 @@ html.dark-mode {
     inset 0 1px 2px hsla(0, 0%, 20%, 0.44),  /* surface dunkel */
     0 4px 6px hsla(0, 0%, 100%, 0.12),       /* elevation */
     0 6px 10px hsla(0, 0%, 100%, 0.2);       /* elevation soft / stärker */
+
+  --shadow-footer:
+    inset 0 1px 2px hsla(0, 0%, 0%, 0.15),
+    0 -3px 6px hsla(0, 0%, 100%, 0.08),
+    0 -6px 12px hsla(0, 0%, 100%, 0.05);
 }
 
 
@@ -133,15 +155,4 @@ html.dark-mode {
   --z-dropdown: 500;
   --z-modal: 1000;
   --z-tools-sheet: 1200;
-}
-
-/* ===========================
-   Base Body Styling
-   =========================== */
-body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 0;
 }

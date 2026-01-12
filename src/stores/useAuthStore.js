@@ -6,6 +6,7 @@ export const useAuthStore = defineStore("auth", {
     user: null,
     token: null,
     isAuthenticated: false,
+    isInitialized: false,
   }),
 
   actions: {
@@ -32,6 +33,31 @@ export const useAuthStore = defineStore("auth", {
       this.setUser(getUserResponse.data);
 
       return;
+    },
+
+    async init(){
+      if(this.isInitialized) return;
+
+      try {
+        await this.refreshToken();
+      }
+      catch(err){
+        this.clear();
+      }
+      finally{
+        this.isInitialized = true;
+      }
+    },
+
+    async signOut(){
+      try{
+        const response = await http.post("/auth/sign-out");
+      }
+      catch(err){
+      }
+      finally{
+        this.clear();
+      }
     },
   },
 });

@@ -3,7 +3,7 @@ import { ref } from "vue";
 import {useRouter} from "vue-router";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { signup } from "../api/auth.api.js";
-import AuthFormCard from "../components/organisms/AuthFormCard.vue";
+import {AuthFormCard} from "../components";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -27,8 +27,9 @@ async function onSubmit() {
     router.push("verify-email");
   }
   catch (err) {
+  console.log(err);
     errorMessage.value =
-      err?.data?.message || "Registration failed. Please try again.";
+      err?.response?.data?.message || "Registration failed. Please try again.";
   }
   finally {
     isLoading.value = false;

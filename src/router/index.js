@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import authRoutes from "@/modules/auth/router";
 import homeRoutes from "@/modules/home/router";
+import dashboardRoutes from "@/modules/dashboard/router";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 
 const routes = [
   ...authRoutes,
   ...homeRoutes,
+  ...dashboardRoutes,
 ];
 
 const router = createRouter({
@@ -13,16 +15,25 @@ const router = createRouter({
   routes,
 });
 
-// Optional: Route Guard
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to) => {
   const authStore = useAuthStore();
   const requiresAuth = to.meta.requiresAuth || false;
 
-  if (requiresAuth && !authStore.isAuthenticated) {
-    next({ name: 'auth.login' });
+  if(!authStore.isInitialized) await authStore.init();
+
+  if(to.path === "/" && authStore.isAuthenticated){
+    return {name: "dashboard"}
   }
-  else {
-    next();
+
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    return {
+      name: "auth.signin",
+      query: { redirect: to.fullPath },
+    };
+  }
+
+  if (to.meta.requiresGuest && authStore.isAuthenticated) {
+    return { name: "dashboard" };
   }
 });
 
