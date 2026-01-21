@@ -5,3 +5,6 @@ export {default as Footer} from "./footer/Footer.vue";
 export {default as Logo} from "./logo/Logo.vue";
 export {default as Sidebar} from "./sidebar/Sidebar.vue";
 export {default as NavToggle} from "./navToggle/NavToggle.vue";
+export {default as BreadcrumbPath} from "./breadcrumbPath/BreadcrumbPath.vue";
+export {default as CurrPath} from "./currPath/CurrPath.vue";
+export {default as SidebarDrawer} from "./sidebarDrawer/SidebarDrawer.vue";

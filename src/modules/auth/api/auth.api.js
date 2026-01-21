@@ -1,4 +1,3 @@
-// src/modules/auth/api/auth.api.js
 import http from "@/services/http.service.js";
 
 export function signin({credentials}) {

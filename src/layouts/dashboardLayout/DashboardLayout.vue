@@ -1,28 +1,20 @@
 <script setup>
-import {ref, computed} from "vue";
-import {useRouter, useRoute} from "vue-router";
-import {Topbar, UserMenu, Sidebar, Logo, NavToggle} from "@/components";
-import {userItems} from "./config/userMenu.config.js";
+import {ref} from "vue";
+import {useRouter} from "vue-router";
+import {Topbar, UserMenu, Sidebar, Logo, NavToggle, BreadcrumbPath, SidebarDrawer} from "@/components";
 import {useAuthStore} from "@/stores/useAuthStore.js";
-import {DashboardSiedebarDrawer} from "./components";
-import {dashboardItems,  settingsItems} from "./config/dashboard.config.js";
+import {dashboardItems} from "./config/dashboard.config.js";
 
 const authStore = useAuthStore();
 const router = useRouter();
-const route = useRoute();
 const isSidebarDrawerVisible = ref(false);
-
-const sidebarItems = computed(() => {
-  return route.path.startsWith("/dashboard/settings")
-    ? settingsItems
-    : dashboardItems;
-});
 
 async function onUserMenuAction(event){
   switch(event.action){
     case "openSettings" :
-
+      router.push("/settings");
     break;
+
     case "signOut" :
       await authStore.signOut();
       router.push("/auth/signin");
@@ -30,7 +22,7 @@ async function onUserMenuAction(event){
   }
 }
 
-async function onDashboardSidebarAction(event){
+async function onSidebarDrawerAction(event){
   switch(event.action){
     case "close" : isSidebarDrawerVisible.value = false;
     break;
@@ -42,41 +34,39 @@ async function onDashboardSidebarAction(event){
 
 <template>
   <div class="dashboard-layout">
-    <header grid-area="top">
+    <header>
       <Topbar>
         <template #topbarLeft>
-          <logo
-          />
-
-          <div class="topbar__nav-toggle-btn">
+          <div class="mobile-only">
             <NavToggle
               @toggleNav:press="isSidebarDrawerVisible = !isSidebarDrawerVisible"
             />
           </div>
 
-          <DashboardSiedebarDrawer
-            :items="sidebarItems"
-            :visible="isSidebarDrawerVisible"
-            @DashboardSidebarDrawer:action="onDashboardSidebarAction"
-          />
+          <Logo/>
         </template>
 
         <template #topbarRight>
           <UserMenu
-            :items="userItems"
             @userMenu:action="onUserMenuAction"
           />
         </template>
       </Topbar>
     </header>
 
-    <aside grid-area="aside">
+    <aside class="desktop-only">
       <Sidebar
-        :items="sidebarItems"
+        :items="dashboardItems"
       />
     </aside>
 
-    <main grid-area="main">
+    <SidebarDrawer class="mobile-only"
+      :items="dashboardItems"
+      :visible="isSidebarDrawerVisible"
+      @sidebarDrawer:action="onSidebarDrawerAction"
+    />
+
+    <main>
       <RouterView />
     </main>
   </div>
@@ -88,38 +78,27 @@ async function onDashboardSidebarAction(event){
 @use "@/styles/media" as media;
 
 .dashboard-layout {
+  height: 100%;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
-  grid-template-area:
+  grid-template-areas:
     "top top"
     "aside main";
 }
 
 header {
-  width: 100%;
+  grid-area: top;
   height: var(--topbar-height);
-  position: fixed;
   z-index: 500;
 }
 
 aside {
-  height: 100%;
-  position: fixed;
-  top: var(--topbar-height);
-  display: none;
+  grid-area: aside;
   z-index: 100;
-
-  @include media.up(bp.$bp-md) {
-    display: flex;
-  }
 }
 
-.topbar__nav-toggle-btn {
-  display: flex;
-
-  @include media.up(bp.$bp-md) {
-    display: none;
-  }
+main {
+  grid-area: main;
 }
 </style>

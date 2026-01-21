@@ -10,18 +10,16 @@ const props = defineProps({
 
 <template>
   <nav class="desktop-navigation">
-    <ul>
-      <li
+      <Button
         v-for="item in navItems"
         :key="item.id"
-      >
-        <RouterLink
-          :to="item.to"
-        >
-          {{item.label}}
-        </RouterLink>
-      </li>
-    </ul>
+        as="router-link"
+        :to="item.to"
+        :icon="item.icon"
+        :label="item.label"
+        severity="secondary"
+        variant="text"
+      />
   </nav>
 </template>
 
@@ -29,16 +27,12 @@ const props = defineProps({
 @use "@/styles/breakpoints" as bp;
 @use "@/styles/media" as media;
 
-.desktop-navigation ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: var(--space-lg);
-}
+.desktop-navigation {
+	display: flex;
+	gap: var(--space-md);
 
-.desktop-navigation a {
-  text-decoration: none;
-  color: var(--color-text);
+	:deep(.p-button){
+		text-decoration: none !important;
+	}
 }
 </style>

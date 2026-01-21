@@ -1,12 +1,6 @@
 <script setup>
 import {ref} from "vue";
-
-const props = defineProps({
-  items: {
-    type: Array,
-    required: true,
-  },
-});
+import {userItems} from "./config/userMenu.config.js";
 
 const emit = defineEmits(["userMenu:action"]);
 
@@ -33,7 +27,7 @@ function onItemClick(action){
 
   <Menu
     ref="menu"
-    :model="items"
+    :model="userItems"
     :popup="true"
   >
     <template #item="{item}">

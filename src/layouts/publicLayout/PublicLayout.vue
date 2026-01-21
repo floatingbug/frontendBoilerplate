@@ -1,6 +1,6 @@
 <script setup>
 import {useRouter} from "vue-router";
-import {Topbar, Navigation, Footer, Logo} from "@/components";
+import {Topbar, Navigation, Footer, Logo, CurrPath} from "@/components";
 import {AuthButtons} from "./components";
 import {navItems} from "./config/navigation.config.js";
 
@@ -28,8 +28,7 @@ function onAuthButtonAction(event){
               :navItems="navItems"
             />
 
-            <Logo
-            />
+            <Logo />
           </div>
         </template>
 

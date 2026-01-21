@@ -12,11 +12,6 @@
   --font-size-lg: 1.125rem;  /* 18px */
   --font-size-xl: 1.25rem;   /* 20px */
   --font-size-2xl: 1.5rem;   /* 24px */
-
-  /* Navigation / UI specific */
-  --font-size-nav: var(--font-size-md);
-  --font-size-topbar: var(--font-size-sm);
-  --font-size-sidebar: var(--font-size-md);
 }
 
 /* ===========================
@@ -83,8 +78,8 @@
   --color-bg: color-mix(in hsl, var(--p-primary-50) 90%, white 10%);
 
   /* Surfaces */
-  --color-surface-bottom: var(--p-surface-200);
-  --color-surface-mid: var(--p-surface-100);
+  --color-surface-bottom: var(--p-surface-100);
+  --color-surface-mid: var(--p-surface-200);
   --color-surface-top: #ffffff;
 
   /* Borders */
@@ -97,6 +92,9 @@
   /* Errors */
   --color-error-bg: var(--p-red-200);
   --color-error-text: var(--p-red-500);
+
+  /* Message */
+  --color-message-text: var(--p-orange-500);
 
   /* Hover / Active states */
   --color-hover-light: rgba(0,0,0,0.04);

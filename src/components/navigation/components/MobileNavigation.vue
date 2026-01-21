@@ -34,25 +34,17 @@ const toggleDrawer = () => (drawerVisible.value = !drawerVisible.value);
       }
     }"
   >
-    <ul class="nav-link-list">
-      <li
+    <div class="links-container">
+      <Button class="link"
         v-for="item in navItems"
         :key="item.id"
-      >
-        <RouterLink
-          :to="item.to"
-          @click="drawerVisible = false"
-        >
-          <div class="link-icon">
-            <i v-if="item.icon" :class="item.icon" />
-          </div>
-
-          <div class="link-label">
-            {{item.label}}
-          </div>
-        </RouterLink>
-      </li>
-    </ul>
+        as="link"
+        :to="item.to"
+        :icon="item.icon"
+        :label="item.label"
+        severity="secondary"
+      />
+    </div>
   </Drawer>
 </template>
 
@@ -64,42 +56,15 @@ const toggleDrawer = () => (drawerVisible.value = !drawerVisible.value);
   box-shadow: var(--shadow-sm);
 }
 
-.nav-link-list {
-  list-style: none;
-  padding: var(--space-md);
-  margin: 0;
+.link {
+  box-shadow: var(--shadow-sm);
+}
+
+.links-container {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-}
-
-.nav-link-list li {
-  border-radius: var(--radius-md);
-}
-
-.nav-link-list a {
-  width: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: var(--space-lg) 0;
-  text-decoration: none;
-  color: var(--color-text);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  background-color: var(--color-surface-top);
-}
-
-.link-icon {
-  position: absolute;
-  right: 50%;
-  transform: translateX(-100%);
-  margin-right: var(--space-sm);
-}
-
-.link-label {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
 </style>

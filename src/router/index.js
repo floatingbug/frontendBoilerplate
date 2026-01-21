@@ -2,12 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router';
 import authRoutes from "@/modules/auth/router";
 import homeRoutes from "@/modules/home/router";
 import dashboardRoutes from "@/modules/dashboard/router";
+import settingsRoutes from "@/modules/settings/router";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 
 const routes = [
   ...authRoutes,
   ...homeRoutes,
   ...dashboardRoutes,
+  ...settingsRoutes,
 ];
 
 const router = createRouter({

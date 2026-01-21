@@ -13,10 +13,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["dashboardSidebarDrawer:action"]);
+const emit = defineEmits(["sidebarDrawer:action"]);
 
 function onUpdateVisible(){
-  emit('dashboardSidebarDrawer:action', {action: 'close'});
+  emit('sidebarDrawer:action', {action: 'close'});
 }
 
 </script>

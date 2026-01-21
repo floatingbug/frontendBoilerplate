@@ -9,7 +9,7 @@
   display: block;
 }
 
-@include up($bp-lg) {
+@include up($bp-md) {
   .desktop-only {
     display: flex;
   }

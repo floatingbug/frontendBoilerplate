@@ -1,5 +1,5 @@
 <script setup>
-const emit = defineEmits(["topbar:action"]);
+import {BreadcrumbPath, CurrPath} from "@/components";
 
 </script>
 
@@ -8,6 +8,9 @@ const emit = defineEmits(["topbar:action"]);
   <div class="topbar">
     <div class="topbar-left">
       <slot name="topbarLeft" />
+
+      <BreadcrumbPath class="desktop-only" />
+      <CurrPath class="mobile-only" />
     </div>
 
     <div class="topbar-right">
@@ -22,8 +25,8 @@ const emit = defineEmits(["topbar:action"]);
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 0 var(--space-sm);
   box-shadow: var(--shadow-sm);
   background-color: var(--color-topbar);
@@ -31,8 +34,8 @@ const emit = defineEmits(["topbar:action"]);
 }
 
 .topbar-left {
-  height: 100%;
   display: flex;
   align-items: center;
 }
+
 </style>
