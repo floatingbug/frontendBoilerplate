@@ -6,6 +6,7 @@ import {sidebarItems} from "./config";
 
 const router = useRouter();
 const isSidebarDrawerVisible = ref(false);
+const isDelitingAccountProcess = ref(false);
 
 function onSidebarDrawerAction(event){
 }
@@ -53,6 +54,7 @@ function onSidebarDrawerAction(event){
       	<RouterView />
       </div>
     </main>
+
   </div>
 </template>
 

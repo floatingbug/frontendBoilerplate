@@ -60,9 +60,15 @@ async function onSubmit() {
     <Button type="submit" label="Sign in" :loading="isLoading" />
 
     <template #footer>
-      <RouterLink to="/auth/signup">
-        Don't have an account?
-      </RouterLink>
+      <div class="footer-container">
+      	<RouterLink to="/auth/signup">
+      	  Don't have an account?
+      	</RouterLink>
+
+      	<RouterLink to="/auth/forgot-password">
+      	  Forgot password?
+      	</RouterLink>
+      </div>
     </template>
   </AuthFormCard>
 </template>
@@ -70,5 +76,11 @@ async function onSubmit() {
 <style scoped>
 :deep(.p-password-input) {
   min-width: 0;
+}
+
+.footer-container {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
 }
 </style>

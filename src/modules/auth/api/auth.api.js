@@ -23,3 +23,11 @@ export function verifyEmail({token}) {
 export function resendVerificationEmail({ email }) {
   return http.post("/auth/verify-email/resend", { email });
 }
+
+export function requestPasswordReset({email}){
+	return http.post("/auth/forgot-password", {email});
+}
+
+export function resetPassword({token, password}){
+	return http.post("/auth/reset-password", {token, password});
+}

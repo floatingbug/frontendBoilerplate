@@ -101,6 +101,9 @@
   --color-active-light: rgba(0,0,0,0.06);
 
   --color-topbar: var(--p-primary-100);
+
+  /* Overlay */
+  --color-overlay: hsl(from var(--p-surface-500) h s l / 50%);
 }
 
 /* ===========================

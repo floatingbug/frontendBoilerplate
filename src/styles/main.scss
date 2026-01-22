@@ -8,3 +8,16 @@
   box-shadow: var(--shadow-md);
   padding: var(--space-xl);
 }
+
+.overlay {
+	inset: 0;
+	position: fixed;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-md);
+	background-color: var(--color-overlay);
+	backdrop-filter: blur(8px);
+	z-index: var(--z-modal);
+}

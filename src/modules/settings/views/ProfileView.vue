@@ -1,10 +1,12 @@
 <script setup>
 import {ref} from "vue";
+import {useRouter} from "vue-router";
 import {ProfileForm, DeleteAccount} from "../components";
 import {useAuthStore} from "@/stores/useAuthStore.js";
 import {updateAccount, getUser, deleteAccount} from "../api/settings.api.js";
 
 const authStore = useAuthStore();
+const router = useRouter();
 const messages = ref({});
 const errorMessages = ref({});
 const isLoading = ref(false);
@@ -73,7 +75,19 @@ function handleProfileFormKeyPress({pressKontext}){
 
 async function onDeleteAccountAction(event){
 	if(event.action === "deleteAccount"){
-		const responseDeleteAccount = await deleteAccount();
+		isLoading.value = true;
+
+		try{
+			const responseDeleteAccount = await deleteAccount();
+			authStore.clear();
+			router.push("/");
+		}
+		catch(error){
+			console.log(error);
+		}
+		finally{
+			isLoading.value = false;
+		}
 	}
 }
 
@@ -100,6 +114,14 @@ async function onDeleteAccountAction(event){
 			/>
 		</div>
 	</div>
+
+	<Teleport to="body">
+		<div class="overlay" v-if="isLoading"
+		>
+		  <ProgressSpinner aria-label="Delete account" />
+		  <p class="progress-text">Deleting your account…</p>
+		</div>
+	</Teleport>
 </template>
 
 

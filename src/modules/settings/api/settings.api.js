@@ -13,5 +13,5 @@ export function confirmEmail({token}) {
 };
 
 export function deleteAccount(){
-	return http.delete("/account/delete-me");
+	return http.delete("/users/me");
 }
