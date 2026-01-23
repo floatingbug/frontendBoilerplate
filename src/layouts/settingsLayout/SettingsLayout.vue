@@ -1,14 +1,26 @@
 <script setup>
 import {ref} from "vue";
 import {useRouter} from "vue-router";
+import {useAuthStore} from "@/stores/useAuthStore.js";
 import {Topbar, Logo, UserMenu, NavToggle, Sidebar, SidebarDrawer} from "@/components";
 import {sidebarItems} from "./config";
 
 const router = useRouter();
+const authStore = useAuthStore();
 const isSidebarDrawerVisible = ref(false);
 const isDelitingAccountProcess = ref(false);
 
 function onSidebarDrawerAction(event){
+}
+
+async function onUserMenuActions(event){
+	switch(event.action){
+		case "signOut" :
+			authStore.clear();
+			await authStore.signOut();
+			router.push("/");
+		break;
+	}
 }
 
 </script>
@@ -32,6 +44,7 @@ function onSidebarDrawerAction(event){
 
         <template #topbarRight>
           <UserMenu
+			@userMenu:action="onUserMenuActions"
           />
         </template>
       </Topbar>

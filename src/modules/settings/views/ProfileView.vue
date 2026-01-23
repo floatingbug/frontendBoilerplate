@@ -119,7 +119,7 @@ async function onDeleteAccountAction(event){
 		<div class="overlay" v-if="isLoading"
 		>
 		  <ProgressSpinner aria-label="Delete account" />
-		  <p class="progress-text">Deleting your account…</p>
+		  <p class="progress-text">Sending confirmation email…</p>
 		</div>
 	</Teleport>
 </template>

@@ -25,6 +25,10 @@ export const useAuthStore = defineStore("auth", {
       this.isAuthenticated = false;
     },
 
+	  async signOut() {
+		http.post("/auth/sign-out");
+	  },
+
     async refreshToken() {
       const refreshTokenResponse = await http.post("/auth/refresh");
       this.setToken(refreshTokenResponse.data.accessToken);
