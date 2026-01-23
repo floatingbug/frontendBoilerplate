@@ -1,25 +1,25 @@
-Vue 3 Modular Application
+# Vue 3 Modular Application
 
-This project is a modular Vue 3 application built with the Composition API using the <script setup> syntax and PrimeVue as the UI framework.
+This project is a **modular Vue 3 application** built with the Composition API using the `<script setup>` syntax and **PrimeVue** as the UI framework.
 
-The architecture follows a feature-based module structure with a clear separation between layouts, views, routing, state, and shared components.
+The architecture follows a **feature-based module structure** with a clear separation between **layouts**, **views**, **routing**, **state**, and **shared components**.
 
-Tech Stack
+---
 
-Vue 3
+## Tech Stack
 
-Vue Router
+* **Vue 3**
+* **Vue Router**
+* **Pinia**
+* **PrimeVue**
+* **SCSS**
+* **Vite**
 
-Pinia
+---
 
-PrimeVue
+## Project Structure
 
-SCSS
-
-Vite
-
-Project Structure
-
+```
 src/
 ├─ components/        # Global, reusable UI components
 ├─ config/            # App & library configuration
@@ -29,364 +29,246 @@ src/
 ├─ services/          # Shared service logic (e.g. API helpers)
 ├─ stores/            # Global Pinia stores
 ├─ styles/            # Global styles, variables, themes
+```
 
-Layout System
+Layouts render views via `<RouterView />`, keeping **page composition explicit**.
 
-Layouts live in:
+---
 
-src/layouts/
+## Layout System
 
-Each layout acts as a page shell and renders module views via <RouterView />.
+Layouts live in `src/layouts/` and act as **page shells**.
 
 Example layouts:
 
-AuthLayout
+* `AuthLayout`
+* `DashboardLayout`
+* `SettingsLayout`
+* `PublicLayout`
 
-DashboardLayout
+### Example Layout
 
-SettingsLayout
-
-PublicLayout
-
-Example
-
+```vue
 <template>
   <Topbar />
   <main>
     <RouterView />
   </main>
 </template>
+```
 
-Layouts are assigned via routing, not inside views.
+---
 
-Feature Modules
+## Feature Modules
 
-Each feature is isolated in its own module under:
+Each module is **self-contained** under `src/modules/`:
 
-src/modules/
-
-Example:
-
+```
 src/modules/auth/
-├─ api/        # API calls related to auth
-├─ components/ # Auth-specific components
+├─ api/        # API calls
+├─ components/ # Module-specific components
 ├─ router/     # Module routes
-├─ store/      # Module-specific state
+├─ store/      # Module state (Pinia)
 ├─ views/      # Route views
+```
 
-This keeps features self-contained and scalable.
+This keeps features scalable and independent.
 
-Views
+---
 
-Views are located inside each module:
+## Views
 
+Views reside in module `views/` folders:
+
+```
 src/modules/auth/views/
+```
 
 Example:
 
+```
 ForgotPasswordView.vue
 ResetPasswordView.vue
 SignInView.vue
 SignUpView.vue
 VerifyEmailView.vue
 VerifyEmailCallbackView.vue
+```
 
-Views are never reused across modules — they represent routes only.
+Views coordinate **UI actions** and call **services/stores** — they contain minimal logic.
 
-Module Routing
+---
 
-Each module defines its own routes.
+## Module Routing
 
-Example (auth module):
+Each module defines routes locally:
 
-import {
-  SignUpView,
-  SignInView,
-  VerifyEmailView,
-  VerifyEmailCallbackView,
-  ForgotPasswordView,
-  ResetPasswordView,
-} from "../views";
-import { AuthLayout } from "@/layouts/authLayout";
+```js
+import { SignUpView, SignInView, ForgotPasswordView, ResetPasswordView } from '../views';
+import { AuthLayout } from '@/layouts/authLayout';
 
 export default [
   {
-    path: "/auth",
+    path: '/auth',
     component: AuthLayout,
     meta: { requiresGuest: true },
     children: [
-      { path: "signin", name: "auth.signin", component: SignInView },
-      { path: "signup", name: "auth.signup", component: SignUpView },
-      { path: "forgot-password", name: "auth.forgot-password", component: ForgotPasswordView },
-      { path: "reset-password", name: "auth.reset-password", component: ResetPasswordView },
-      { path: "verify-email", name: "verify-email", component: VerifyEmailView },
-      { path: "verify-email/callback", name: "verify-email-callback", component: VerifyEmailCallbackView },
+      { path: 'signin', name: 'auth.signin', component: SignInView },
+      { path: 'signup', name: 'auth.signup', component: SignUpView },
+      { path: 'forgot-password', name: 'auth.forgot-password', component: ForgotPasswordView },
+      { path: 'reset-password', name: 'auth.reset-password', component: ResetPasswordView },
     ],
   },
 ];
+```
 
-Global Router
+---
 
-All module routes are composed in the global router:
+## Global Router
 
-import authRoutes from "@/modules/auth/router";
-import homeRoutes from "@/modules/home/router";
-import dashboardRoutes from "@/modules/dashboard/router";
-import settingsRoutes from "@/modules/settings/router";
+All module routes are composed globally:
+
+```js
+import authRoutes from '@/modules/auth/router';
+import dashboardRoutes from '@/modules/dashboard/router';
+import settingsRoutes from '@/modules/settings/router';
+import homeRoutes from '@/modules/home/router';
 
 const routes = [
   ...authRoutes,
-  ...homeRoutes,
   ...dashboardRoutes,
   ...settingsRoutes,
+  ...homeRoutes,
 ];
+```
 
-Route Guards
+Guards handle auth logic:
 
-Authentication logic is handled globally:
-
-requiresAuth
-
-requiresGuest
-
-automatic redirects
-
-store initialization before navigation
-
+```js
 router.beforeEach(async (to) => {
   const authStore = useAuthStore();
-
-  if (!authStore.isInitialized) {
-    await authStore.init();
-  }
-
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    return { name: "auth.signin" };
-  }
-
-  if (to.meta.requiresGuest && authStore.isAuthenticated) {
-    return { name: "dashboard" };
-  }
+  if (!authStore.isInitialized) await authStore.init();
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) return { name: 'auth.signin' };
+  if (to.meta.requiresGuest && authStore.isAuthenticated) return { name: 'dashboard' };
 });
+```
 
-Global Components
+---
 
-Reusable UI components live in:
+## Global Components
 
-src/components/
+Located in `src/components/` and reused across layouts and modules.
 
-Examples:
+Examples: `Topbar`, `Sidebar`, `UserMenu`, `NavToggle`, `BreadcrumbPath`, `Logo`.
 
-Topbar
+---
 
-Sidebar
+## PrimeVue Configuration
 
-SidebarDrawer
+Centralized in `src/config/primevue/`:
 
-UserMenu
+* Theme setup
+* Environment configuration
+* Global options
 
-NavToggle
+---
 
-BreadcrumbPath
+## Styling
 
-Logo
+Global styles in `src/styles/` include:
 
-These components:
+* CSS variables
+* Typography & spacing scales
+* Light/dark mode
 
-are layout-agnostic
+Scoped SCSS is used for views and components.
 
-contain no business logic
+---
 
-can be reused across modules
+## Architectural Principles
 
-Each component exposes an index.js for clean imports.
+* Feature-first, module-based
+* Layouts control page composition
+* Views coordinate actions but stay thin
+* Reusable components are global
+* Explicit routing and store usage
+* Backend-aligned, scalable
 
-PrimeVue Configuration
+---
 
-PrimeVue setup is centralized in:
+## Features
 
-src/config/primevue/
+### Authentication
 
-This includes:
+* Sign up
+* Sign in
+* Sign out
+* Email verification
+* Forgot/reset password
 
-theme setup
+### Account & Profile
 
-environment configuration
+* Update name
+* Update email (with confirmation)
+* Update password
+* Delete account
 
-global PrimeVue options
+### Routing & Access Control
 
-Styling
+* Route-based layouts
+* Auth/guest guards
+* Automatic redirects
 
-Global styles live in:
+---
 
-src/styles/
+## Why This Architecture
 
-This includes:
+* Each module owns its routes, views, API calls, and state
+* No hidden coupling between modules
+* Layouts are explicit via routing
+* Easy to scale by adding modules
+* Perfect match with backendBoilerplate
 
-CSS variables
+### Architecture Diagram
 
-spacing & typography scales
-
-light/dark mode
-
-layout helpers
-
-Components and views use scoped SCSS, global styles only define foundations.
-
-Architectural Principles
-
-Feature-first structure
-
-Layouts control page composition
-
-Views = routes only
-
-Reusable components are global
-
-No cross-module coupling
-
-Explicit routing
-
-Scales well for large apps
-
-Features
-
-Authentication
-
-Sign up (email + password)
-
-Sign in
-
-Sign out
-
-Email verification flow
-
-Password reset (forgot password & reset password)
-
-Account & Profile
-
-Update name
-
-Update email (with confirmation flow)
-
-Update password
-
-Delete account
-
-Routing & Access Control
-
-Route-based layouts
-
-Auth / guest guards
-
-Automatic redirects
-
-Why This Architecture
-
-This project uses a feature-first, module-based architecture to keep complexity under control as the application grows.
-
-Key Reasons
-
-Clear ownership: Each module owns its routes, views, API calls and state
-
-No hidden coupling: Modules do not depend on each other
-
-Layouts are explicit: Page structure is decided by routing, not components
-
-Easy to scale: Adding a feature means adding a new module
-
-Backend-aligned: Frontend structure mirrors backend use cases
-
-This avoids common problems like:
-
-giant global components folders
-
-unclear routing responsibilities
-
-shared state becoming a dumping ground
-
-Architecture Overview
-
+```mermaid
 graph TD
     Router[Global Router]
     Router --> Layouts
     Layouts --> Views
-
     Views --> ModuleAPI[Module API]
     Views --> ModuleStore[Module Store]
-
     ModuleAPI --> Backend
-
-    Components[Global Components]
-    Components --> Views
+    Components[Global Components] --> Views
     Components --> Layouts
+```
 
-Backend Compatibility
+---
 
-All API endpoints required by this frontend already exist in the following backend template:
+## Backend Compatibility
 
-👉 backendBoilerplatehttps://github.com/floatingbug/backendBoilerplate
+This frontend aligns with [backendBoilerplate](https://github.com/floatingbug/backendBoilerplate) and supports all corresponding endpoints.
 
-The frontend modules and flows (auth, email verification, password reset, account management) are designed to match this backend one-to-one.
+---
 
-You can use this frontend together with the backend template without any structural changes.
+## Self-Onboarding Guide
 
-Self-Onboarding Guide
+1. Create a new module under `src/modules/`
+2. Add `views/`, `router/`, `api/`, `store/` (if needed)
+3. Export routes from the module router
+4. Register routes in global router
+5. Choose or create a layout
+6. Reuse global components
+7. Keep views thin: **logic lives in services and stores**
 
-1. Add a new feature
+---
 
-Create a new folder under src/modules/
+## Summary
 
-Add:
+This architecture scales cleanly, keeps features isolated, and avoids spaghetti code.
 
-views/
+---
 
-router/
-
-api/
-
-store/ (if needed)
-
-2. Add routes
-
-Export routes from the module router
-
-Register them in the global router
-
-3. Choose a layout
-
-Wrap your routes with an existing layout
-
-Or create a new layout under src/layouts/
-
-4. Reuse global components
-
-Use components from src/components/
-
-Do not put business logic into them
-
-5. Keep views thin
-
-Views coordinate data & actions
-
-Logic lives in API services and stores
-
-Summary
-
-This architecture is designed to:
-
-scale cleanly
-
-keep features isolated
-
-make routing predictable
-
-avoid spaghetti imports
-
-support large teams
-
-If you add a new feature, you add a new module — not a new folder everywhere.
-
-License
+## License
 
 MIT
