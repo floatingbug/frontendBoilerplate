@@ -1,16 +1,18 @@
-import { DashboardLayout } from "../../../layouts";
+import { DashboardLayout } from '../../../layouts'
+import { sidebarItems } from './config'
+
 
 export default [
-  {
-    path: "/dashboard",
-	name: "dashboard",
-    component: DashboardLayout,
-    meta: {
-      requiresAuth: true,
-      breadcrumb: "Dashboard",
-      sidebar: "dashboard",
-    },
-    children: [
-    ],
-  },
-];
+	{
+		path: '/dashboard',
+		name: 'dashboard',
+		component: DashboardLayout,
+		meta: {
+			requiresAuth: true,
+			breadcrumb: 'Dashboard',
+			sidebar: 'dashboard',
+			sidebarItems,
+		},
+		children: [],
+	},
+]
