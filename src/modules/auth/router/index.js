@@ -6,7 +6,7 @@ import {
 	ForgotPasswordView,
 	ResetPasswordView,
 } from '../views'
-import { AuthLayout } from '@/layouts/authLayout'
+import { AuthLayout } from '@/app/layouts/authLayout'
 
 export default [
 	{

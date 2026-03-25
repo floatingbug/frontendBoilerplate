@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { verifyEmail, resendVerificationEmail } from '../api/auth.api.js'
+import authServices from '../services'
 
 const route = useRoute()
 const router = useRouter()
@@ -24,7 +24,7 @@ onMounted(async () => {
 	}
 
 	try {
-		await verifyEmail({ token })
+		await authServices.verifyEmail({ token })
 		isSuccess.value = true
 
 		setTimeout(() => {
@@ -51,7 +51,7 @@ async function resendEmail() {
 	resendLoading.value = true
 
 	try {
-		await resendVerificationEmail({ email: email.value })
+		await accountApi.resendVerificationEmail({ email: email.value })
 		resendSuccess.value = true
 	} catch {
 		errorMessage.value = 'Failed to resend verification email.'

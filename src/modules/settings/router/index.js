@@ -1,12 +1,11 @@
-import { SettingsLayout } from '@/layouts'
+import { SettingsLayout } from '@/app/layouts'
 import { ProfileView, ConfirmEmailCallbackView } from '../views'
-import {sidebarItems} from "./config";
+
 
 export default [
 	{
 		path: '/settings',
 		component: SettingsLayout,
-		redirect: '/settings/profile',
 		meta: { breadcrumb: 'Settings' },
 		children: [
 			{
@@ -14,7 +13,6 @@ export default [
 				component: ProfileView,
 				meta: {
 					breadcrumb: 'Profile',
-					sidebarItems,
 				},
 			},
 		],

@@ -1,33 +1,46 @@
-import http from '@/services/http.service.js'
+import http from '@/shared/api/http.client.js'
 
-export function signin({ credentials }) {
-	return http.post('/auth/sign-in', credentials)
+
+async function confirmEmail({ token }) {
+	return await http.get(`/account/confirm-email?token=${token}`)
 }
 
-export function signup(data) {
-	return http.post('/auth/sign-up', data)
-}
-
-export function logout() {
-	return http.post('/auth/sign-out')
-}
-
-export function getCurrentUser() {
-	return http.get('/auth/me')
-}
-
-export function verifyEmail({ token }) {
+async function verifyEmail({ token }) {
 	return http.get(`/auth/verify-email?token=${token}`)
 }
 
-export function resendVerificationEmail({ email }) {
+async function resendVerificationEmail({ email }) {
 	return http.post('/auth/verify-email/resend', { email })
 }
 
-export function requestPasswordReset({ email }) {
+async function requestPasswordReset({ email }) {
 	return http.post('/auth/forgot-password', { email })
 }
 
-export function resetPassword({ token, password }) {
+async function resetPassword({ token, password }) {
 	return http.post('/auth/reset-password', { token, password })
 }
+
+async function signin({ credentials }) {
+	return http.post('/auth/sign-in', credentials)
+}
+
+async function signup(data) {
+	return http.post('/auth/sign-up', data)
+}
+
+async function logout() {
+	return http.post('/auth/sign-out')
+}
+
+
+export default {
+	signin,
+	signup,
+	logout,
+	confirmEmail,
+	verifyEmail,
+	resendVerificationEmail,
+	requestPasswordReset,
+	resetPassword,
+};

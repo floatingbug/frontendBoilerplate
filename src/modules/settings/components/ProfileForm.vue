@@ -17,7 +17,7 @@ const props = defineProps({
 	},
 })
 
-const emit = defineEmits(['profileForm:action'])
+const emit = defineEmits(['action'])
 
 const localUser = ref({ ...props.user })
 const password = ref('')
@@ -34,7 +34,7 @@ function onSubmit() {
 
 	if (password.value !== '') newChanges.password = password.value
 
-	emit('profileForm:action', {
+	emit('action', {
 		action: 'profileChanged',
 		changes: newChanges,
 	})
@@ -43,7 +43,7 @@ function onSubmit() {
 watch(
 	() => localUser.value.name,
 	() => {
-		emit('profileForm:action', {
+		emit('action', {
 			action: 'keyPress',
 			pressKontext: 'name',
 		})
@@ -53,7 +53,7 @@ watch(
 watch(
 	() => localUser.value.email,
 	() => {
-		emit('profileForm:action', {
+		emit('action', {
 			action: 'keyPress',
 			pressKontext: 'email',
 		})
@@ -63,7 +63,7 @@ watch(
 watch(
 	() => password.value,
 	() => {
-		emit('profileForm:action', {
+		emit('action', {
 			action: 'keyPress',
 			pressKontext: 'password',
 		})

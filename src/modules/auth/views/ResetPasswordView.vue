@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { resetPassword } from '../api/auth.api.js'
+import authServices from '../services'
 
 const route = useRoute()
 const router = useRouter()
@@ -32,7 +32,7 @@ async function onSubmit() {
 	isLoading.value = true
 
 	try {
-		const responseResetPassword = await resetPassword({ token, password: password.value })
+		const responseResetPassword = await authServices.resetPassword({ token, password: password.value })
 
 		message.value = 'Your password has been reset successfully.'
 		setTimeout(() => router.push('/auth/signin'), 2000)

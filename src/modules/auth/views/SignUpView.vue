@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores'
-import { signup } from '../api/auth.api.js'
+import { useAuthStore } from '../store'
+import authApi from '../api/auth.api.js'
 import { AuthFormCard } from '../components'
 
 const router = useRouter()
@@ -18,7 +18,7 @@ async function onSubmit() {
 	isLoading.value = true
 
 	try {
-		const response = await signup({
+		const response = await authApi.signup({
 			name: name.value,
 			email: email.value,
 			password: password.value,

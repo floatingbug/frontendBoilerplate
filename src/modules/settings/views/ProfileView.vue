@@ -1,10 +1,13 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import {useAuthStore} from "@/modules/auth/store";
+import {useAccountStore} from "@/modules/account/store";
 import { ProfileForm, DeleteAccount } from '../components'
-import { useAuthStore } from '@/stores'
+import accountServices from "@/modules/account/services";
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
+const accountStore = useAccountStore();
 const router = useRouter()
 const messages = ref({})
 const errorMessages = ref({})
@@ -16,7 +19,7 @@ async function onProfileFormAction(event) {
 			try{
 				isLoading.value = true;
 
-				const response = await authStore.updateAccount({ payload: event.changes });
+				const response = await accountServices.updateAccount({ payload: event.changes });
 
 				messages.value = response.data.messages
 				errorMessages.value = response.data.errorMessages
@@ -26,18 +29,15 @@ async function onProfileFormAction(event) {
 				// if a field was updated, save changes in user
 				for (const e of response.data.updated) {
 					if (e === 'name') {
-						authStore.user.name = changes.name
+						accountStore.setUser({name: changes.name});
 					}
 					if (e === 'email') {
-						authStore.user.email = changes.email
-					}
-					if (e === 'password') {
-						authStore.user.password = changes.password
+						accountStore.setUser({email: changes.email});
 					}
 				}
 			}
 			catch(error){
-				if (error.response.data.error.type === 'password') {
+				if (error?.response?.data.error.type === 'password') {
 					errorMessages.value.password = error.response.data.error.message
 				}
 			}
@@ -72,9 +72,10 @@ function handleProfileFormKeyPress({ pressKontext }) {
 async function onDeleteAccountAction(event) {
 	if (event.action === 'deleteAccount') {
 		try {
-			const response = await authStore.deleteAccount();
+			const response = await accountServices.deleteAccount();
 			router.push('/')
 			authStore.clear()
+			accountStore.clear();
 		}
 		catch (error) {
 			console.log(error)
@@ -89,11 +90,11 @@ async function onDeleteAccountAction(event) {
 			<h2>Profile Details</h2>
 
 			<ProfileForm
-				:user="authStore.user"
+				:user="accountStore.user"
 				:messages="messages"
 				:errorMessages="errorMessages"
 				:isLoading="isLoading"
-				@profileForm:action="onProfileFormAction"
+				@action="onProfileFormAction"
 			/>
 		</div>
 
@@ -111,8 +112,8 @@ async function onDeleteAccountAction(event) {
 </template>
 
 <style scoped lang="scss">
-@use '@/styles/breakpoints' as bp;
-@use '@/styles/media' as media;
+@use '@/shared/styles/breakpoints' as bp;
+@use '@/shared/styles/media' as media;
 
 .profile {
 	display: flex;

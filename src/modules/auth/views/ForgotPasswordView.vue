@@ -1,8 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import { requestPasswordReset } from '../api/auth.api.js'
+import authServices from '../services'
 
 const email = ref('')
 const isLoading = ref(false)
@@ -15,7 +13,7 @@ async function onSubmit() {
 	errorMessage.value = ''
 
 	try {
-		await requestPasswordReset({ email: email.value })
+		await authServices.requestPasswordReset({ email: email.value })
 
 		message.value =
 			'If an account with this email exists, you will receive a password reset link shortly.'

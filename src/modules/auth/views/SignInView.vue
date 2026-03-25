@@ -1,8 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useAuthStore } from '@/stores'
-import { signin } from '../api/auth.api.js'
+import { useAuthStore } from '../store'
+import { useAccountStore } from '@/modules/account/store'
+import authApi from '../api/auth.api.js'
 import { AuthFormCard } from '../components'
 
 const router = useRouter()
@@ -10,6 +11,7 @@ const route = useRoute()
 const nameOrEmail = ref('')
 const password = ref('')
 const authStore = useAuthStore()
+const accountStore = useAccountStore()
 const isLoading = ref(false)
 const errorMessage = ref('')
 
@@ -28,14 +30,16 @@ async function onSubmit() {
 	isLoading.value = true
 
 	try {
-		const response = await signin({ credentials })
-		authStore.setUser(response.data.user)
-		authStore.setToken(response.data.accessToken)
+		const response = await authApi.signin({ credentials });
+		accountStore.setUser({...response.data.user});
+		authStore.setToken(response.data.accessToken);
 
-		router.push('/dashboard')
-	} catch (err) {
+		router.push('/dashboard');
+	}
+	catch (err) {
 		errorMessage.value = err?.response?.data?.message || 'Login failed. Please try again.'
-	} finally {
+	}
+	finally {
 		isLoading.value = false
 	}
 }

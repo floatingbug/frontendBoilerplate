@@ -1,11 +1,12 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores'
+import authServices from '@/modules/auth/services'
+import {useAccountStore} from '@/modules/account/store'
 
 const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore()
+const accountStore = useAccountStore();
 const isLoading = ref(true)
 const isSuccess = ref(false)
 const errorMessage = ref('')
@@ -21,14 +22,15 @@ onMounted(async () => {
 	}
 
 	try {
-		const resultConfirmEmail = await authStore.confirmEmail({ token })
-		authStore.user.email = resultConfirmEmail.data.newEmail
+		const resultConfirmEmail = await authServices.confirmEmail({ token })
+		accountStore.setUser({email: resultConfirmEmail.data.newEmail});
 		isSuccess.value = true
 
 		setTimeout(() => {
 			router.push('/dashboard')
 		}, 3000)
 	} catch (err) {
+	console.log(err);
 		errorMessage.value =
 			err?.response?.data?.message || 'Email confirmation failed. Please try again.'
 	} finally {

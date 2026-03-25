@@ -1,4 +1,4 @@
-import { DashboardLayout } from '../../../layouts'
+import { DashboardLayout } from '@/app/layouts'
 import { sidebarItems } from './config'
 
 
