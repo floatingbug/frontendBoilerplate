@@ -12,7 +12,10 @@ const props = defineProps({
 		:model="items"
 		:pt="{
 			root: {
-				style: 'height: 100%;',
+				style: {
+					height: '100%',
+					'border-radius': 0,
+				}
 			},
 		}"
 	/>

@@ -1,6 +1,6 @@
 <script setup>
 import Drawer from 'primevue/drawer'
-import {Sidebar} from '../'
+import Menu from "primevue/menu";
 
 const props = defineProps({
 	items: {
@@ -22,7 +22,17 @@ function onUpdateVisible() {
 
 <template>
 	<Drawer :visible="visible" position="left" @update:visible="onUpdateVisible">
-		<Sidebar :items="items" />
+		<Menu
+			:model="items"
+			:pt="{
+				root: {
+					style: {
+						height: '100%',
+						border: 'none',
+					}
+				},
+			}"
+		/>
 	</Drawer>
 </template>
 
