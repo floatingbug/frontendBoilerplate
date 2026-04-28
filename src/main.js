@@ -18,8 +18,8 @@ import ConfirmDialog from 'primevue/confirmdialog'
 import App from './App.vue'
 import router from './app/router'
 import './shared/styles/main.scss'
-import './shared/styles/tokens.css'
 import 'primeicons/primeicons.css'
+
 
 const app = createApp(App)
 

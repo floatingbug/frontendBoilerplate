@@ -29,7 +29,7 @@ async function signup(data) {
 	return http.post('/auth/sign-up', data)
 }
 
-async function logout() {
+async function signOut() {
 	return http.post('/auth/sign-out')
 }
 
@@ -37,7 +37,7 @@ async function logout() {
 export default {
 	signin,
 	signup,
-	logout,
+	signOut,
 	confirmEmail,
 	verifyEmail,
 	resendVerificationEmail,

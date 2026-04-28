@@ -1,11 +1,13 @@
 import HomeView from '../views/HomeView.vue'
 import { PublicLayout } from '@/app/layouts'
-import {navItems} from "./config";
 
 export default [
 	{
 		path: '/',
 		component: PublicLayout,
+		meta: {
+			context: "home",
+		},
 		children: [
 			{
 				path: '',
@@ -13,7 +15,6 @@ export default [
 				component: HomeView,
 				meta: {
 					breadcrumb: 'Home',
-					navItems,
 				},
 			},
 		],

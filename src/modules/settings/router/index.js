@@ -1,12 +1,15 @@
-import { SettingsLayout } from '@/app/layouts'
+import { AppLayout } from '@/app/layouts'
 import { ProfileView, ConfirmEmailCallbackView } from '../views'
 
 
 export default [
 	{
 		path: '/settings',
-		component: SettingsLayout,
-		meta: { breadcrumb: 'Settings' },
+		component: AppLayout,
+		meta: {
+			breadcrumb: 'Settings',
+			context: "settings",
+		},
 		children: [
 			{
 				path: 'profile',

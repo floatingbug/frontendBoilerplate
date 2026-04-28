@@ -6,7 +6,7 @@ import {
 	ForgotPasswordView,
 	ResetPasswordView,
 } from '../views'
-import { AuthLayout } from '@/app/layouts/authLayout'
+import { AuthLayout } from '@/app/layouts'
 
 export default [
 	{
@@ -14,6 +14,7 @@ export default [
 		component: AuthLayout,
 		meta: {
 			requiresGuest: true,
+			context: "auth",
 		},
 		children: [
 			{
